@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-from services.notification import play_visa_alarm, send_visa_notification
+from services.notification import play_visa_alarm, send_visa_notification, send_sms_message
 
 def check_appointment(team_id, button_id):
     chrome_options = Options()
@@ -51,15 +51,17 @@ def check_appointment(team_id, button_id):
 
             expected_text = "Kein freier Termin verfügbar"
             if h2_element.text != expected_text:
+                send_sms_message(team_id)
                 send_visa_notification(f"team {team_id}")
                 play_visa_alarm()
-
         except Exception as e:
+            send_sms_message(team_id)
             send_visa_notification(f"team {team_id}")
             play_visa_alarm()
 
     except Exception as e:
         print(f"An error occurred: {e}")
+        send_sms_message(team_id)
         send_visa_notification(f"team {team_id}")
         play_visa_alarm()
     finally:

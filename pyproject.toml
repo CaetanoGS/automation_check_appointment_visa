@@ -12,6 +12,7 @@ selenium = "^4.22.0"
 webdriver-manager = "^4.0.1"
 pygame = "^2.6.0"
 python-dotenv = "^1.0.1"
+twilio = "^9.2.3"
 
 
 [build-system]

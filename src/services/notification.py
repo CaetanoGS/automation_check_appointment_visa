@@ -4,7 +4,34 @@ import ssl
 from email.message import EmailMessage
 import time
 import pygame
+from twilio.rest import Client
+from dotenv import load_dotenv
 
+dotenv_path = '.env'
+load_dotenv(dotenv_path)
+
+def send_sms_message(team: str):
+    account_sid = os.environ.get("ACC_SID")
+    auth_token = os.environ.get("AUTH_TOKEN")
+    from_number = os.environ.get("TWILIO_NUMBER")
+    gustavo_number = os.environ.get("GUSTAVO_NUMBER")
+    mayara_number = os.environ.get("MAYARA_NUMBER")
+
+    if not all([account_sid, auth_token, from_number, gustavo_number, mayara_number]):
+        raise ValueError("One or more environment variables are missing.")
+
+    client = Client(account_sid, auth_token)
+
+    message_body = f'Aparentemente novos horários estão disponíveis no time {team}, por favor checar o link: https://termine.staedteregion-aachen.de/auslaenderamt/select2?md=1'
+    recipients = [gustavo_number]
+
+    for recipient in recipients:
+        client.messages.create(
+            body=message_body,
+            from_=from_number,
+            to=recipient
+        )
+    
 
 def play_visa_alarm():
     try:
